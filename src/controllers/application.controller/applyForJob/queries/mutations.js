@@ -7,7 +7,7 @@ const applyForJobMutation = `
       name
       status
       application_date
-      assignmentLink
+      assignment_link
       score
     }
   }

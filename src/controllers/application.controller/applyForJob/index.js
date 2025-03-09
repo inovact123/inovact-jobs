@@ -29,7 +29,7 @@ const {
  *             properties:
  *               name:
  *                 type: string
- *               assignmentLink:
+ *               assignment_link:
  *                 type: string
  *     responses:
  *       201:
@@ -47,7 +47,7 @@ const applyForJob = catchAsync(async (req, res) => {
   }
 
   const { jobId } = req.params;
-  const { name, assignmentLink } = req.body;
+  const { name, assignment_link } = req.body;
   const applicant_id = req.body.cognito_sub; // Yet to think of this
 
   const jobAndApplicationCheckResponse = await Hasura(
@@ -92,7 +92,7 @@ const applyForJob = catchAsync(async (req, res) => {
       job_id: jobId,
       applicant_id,
       name,
-      assignmentLink,
+      assignment_link,
       status: "pending",
       application_date: new Date().toISOString(),
       score: null,
