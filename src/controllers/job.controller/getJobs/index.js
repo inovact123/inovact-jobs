@@ -60,7 +60,6 @@ const getJobs = catchAsync(async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // Check if we're fetching a specific job by ID
   if (req.params.jobId) {
     const { jobId } = req.params;
 
@@ -80,7 +79,6 @@ const getJobs = catchAsync(async (req, res) => {
     });
   }
 
-  // Build filter variables for the query
   const filters = {};
   const { job_type, location, limit = 10, offset = 0 } = req.query;
 

@@ -33,6 +33,12 @@ const companySanitizer = [
     .withMessage("Email notifications must be true or false"),
 ];
 
+const addCompanySanitizer = [
+  cognito_sub,
+  body("email_id").isEmail().withMessage("Must be a valid email address"),
+];
+
 module.exports = {
+  addCompanySanitizer,
   companySanitizer,
 };

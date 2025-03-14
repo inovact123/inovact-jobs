@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const { query: Hasura } = require("../../../utils/hasura");
 const catchAsync = require("../../../utils/catchAsync");
 const { createJobQuery } = require("./queries/mutations");
+const getCompanyId = require("./queries/queries");
 
 /**
  * @swagger
@@ -63,9 +64,21 @@ const createJob = catchAsync(async (req, res) => {
     job_status = "active",
   } = req.body;
 
-  const companyId = req.body.companyId;
+  const cognito_sub = req.body.cognito_sub;
 
-  const createJobQueryResponse = await Hasura(createJobQuery, {
+  const getCompanyIdResponse = await Hasura(getCompanyId, {
+    cognito_sub,
+  });
+
+  const companyId = getCompanyIdResponse.result.data.company[0].id;
+
+  if (!companyId) {
+    return res.status(404).json({
+      status: false,
+      message: "Company not found",
+    });
+  }
+  console.log(
     job_title,
     job_type,
     location,
@@ -81,7 +94,30 @@ const createJob = catchAsync(async (req, res) => {
     required_skills,
     preferred_skills,
     job_status,
-    companyId,
+    companyId
+  );
+
+  const createJobQueryResponse = await Hasura(createJobQuery, {
+    objects: [
+      {
+        job_title,
+        job_type,
+        location,
+        min_salary,
+        max_salary,
+        job_description,
+        assignment_description,
+        assignment_deadline,
+        application_deadline,
+        city,
+        monthly_stipend,
+        duration,
+        required_skills,
+        preferred_skills,
+        job_status,
+        posted_by: companyId,
+      },
+    ],
   });
 
   return res.status(201).json({

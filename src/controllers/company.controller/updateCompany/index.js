@@ -63,7 +63,7 @@ const upsertCompany = catchAsync(async (req, res) => {
       contact_person,
       email,
       email_notifications,
-      user_id: cognito_sub,
+      cognito_sub,
     },
   });
 

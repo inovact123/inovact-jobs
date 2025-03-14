@@ -52,15 +52,8 @@ const changeApplicationStatus = catchAsync(async (req, res) => {
 
   const { applicationId } = req.params;
   const { status, score } = req.body;
-  const user_id = req.body.cognito_sub; //Yet to do this
+  const cognito_sub = req.body.cognito_sub;
 
-  const validStatuses = [
-    "pending",
-    "reviewing",
-    "shortlisted",
-    "rejected",
-    "selected",
-  ];
   if (!validStatuses.includes(status)) {
     return res.status(400).json({
       status: false,
@@ -102,14 +95,6 @@ const changeApplicationStatus = catchAsync(async (req, res) => {
     id: applicationId,
     updates: updateObject,
   });
-
-  if (updateResponse.errors) {
-    return res.status(400).json({
-      status: false,
-      message: "Failed to update application status",
-      errors: updateResponse.errors,
-    });
-  }
 
   return res.status(200).json({
     status: true,

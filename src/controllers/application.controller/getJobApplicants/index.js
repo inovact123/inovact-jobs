@@ -60,11 +60,11 @@ const getJobApplicants = catchAsync(async (req, res) => {
   }
 
   const { jobId } = req.params;
-  const user_id = req.body.cognito_sub;
+  const cognito_sub = req.body.cognito_sub;
 
   const ownershipResponse = await Hasura(checkJobOwnershipQuery, {
     job_id: parseInt(jobId),
-    user_id,
+    cognito_sub,
   });
 
   if (ownershipResponse.result.data.jobs.length === 0) {

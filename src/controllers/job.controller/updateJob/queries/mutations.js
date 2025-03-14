@@ -1,6 +1,10 @@
 const updateJobQuery = `
-  mutation UpdateJob($id: Int!, $updates: jobs_set_input!) {
-    update_jobs(where: {id: {_eq: $id}}, _set: $updates) {
+  mutation UpdateJob($id: Int!, $companyId:Int!, $updates: jobs_set_input!) {
+    update_jobs(where: {id: {_eq: $id}, company:{
+      id: {
+        _eq: $companyId
+      }
+    }}, _set: $updates) {
       affected_rows
       returning {
         id

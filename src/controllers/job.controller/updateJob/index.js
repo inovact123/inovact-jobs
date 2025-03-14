@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const { query: Hasura } = require("../../../utils/hasura");
 const catchAsync = require("../../../utils/catchAsync");
 const { updateJobQuery } = require("./queries/mutations");
+const getCompanyId = require("./queries/queries");
 
 /**
  * @swagger
@@ -48,6 +49,20 @@ const updateJob = catchAsync(async (req, res) => {
   }
 
   const { jobId } = req.params;
+  const cognito_sub = req.body.cognito_sub;
+
+  const getCompanyIdResponse = await Hasura(getCompanyId, {
+    cognito_sub,
+  });
+
+  const companyId = getCompanyIdResponse.result.data.company[0].id;
+
+  if (!companyId) {
+    return res.status(404).json({
+      status: false,
+      message: "Company not found",
+    });
+  }
 
   if (
     req.body.min_salary &&
@@ -61,7 +76,6 @@ const updateJob = catchAsync(async (req, res) => {
 
   const updateFields = {};
 
-  // Only include fields that were provided in the request
   const fieldNames = [
     "job_title",
     "job_type",
@@ -88,10 +102,10 @@ const updateJob = catchAsync(async (req, res) => {
 
   const updateJobQueryResponse = await Hasura(updateJobQuery, {
     id: jobId,
+    companyId,
     updates: updateFields,
   });
 
-  // Check if job was found and updated
   if (updateJobQueryResponse.result.data.update_jobs.affected_rows === 0) {
     return res.status(404).json({
       status: false,

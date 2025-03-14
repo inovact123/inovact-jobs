@@ -1,6 +1,10 @@
 const checkApplicationOwnershipQuery = `
-  query CheckApplicationOwnership($id: uuid!, $applicant_id: String!) {
-    applications(where: {id: {_eq: $id}, applicant_id: {_eq: $applicant_id}}) {
+  query CheckApplicationOwnership($id: Int!, $cognito_sub: String!) {
+    applications(where: {id: {_eq: $id}, user:{
+      cognito_sub: {
+        _eq: $cognito_sub
+      }
+    }}) {
       id
     }
   }

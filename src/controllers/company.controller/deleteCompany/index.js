@@ -27,22 +27,23 @@ const deleteCompany = catchAsync(async (req, res) => {
   }
 
   const { id } = req.params;
+  const cognito_sub = req.body.cognito_sub;
 
   const deleteResponse = await Hasura(deleteCompanyQuery, {
     id,
+    cognito_sub,
   });
 
-  // Check if company settings were found and deleted
   if (deleteResponse.result.data.delete_company.affected_rows === 0) {
     return res.status(404).json({
       status: false,
-      message: "Company settings not found",
+      message: "Company not found",
     });
   }
 
   return res.status(200).json({
     status: true,
-    message: "Company settings deleted successfully",
+    message: "Company deleted successfully",
     data: deleteResponse.result.data.delete_company_settings,
   });
 });

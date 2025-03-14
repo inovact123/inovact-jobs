@@ -18,7 +18,6 @@ const createJobQuery = `mutation creteJob($objects: [jobs_insert_input!]!){
     preferred_skills
     posted_by
     job_status
-    posted_date
     company{
       id
       company_name

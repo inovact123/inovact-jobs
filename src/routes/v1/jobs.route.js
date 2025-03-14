@@ -1,5 +1,10 @@
 const express = require("express");
-const jobController = require("../../controllers/job.controller");
+const {
+  createJob,
+  deleteJob,
+  getJobs,
+  updateJob,
+} = require("../../controllers/job.controller");
 const {
   createJobSanitizer,
   updateJobSanitizer,
@@ -19,19 +24,19 @@ const {
 const router = express.Router();
 
 // Get a specific job by ID
-router.get("/:id", getJobByIdSanitizer, jobController.getJobs);
+router.get("/:id", getJobByIdSanitizer, getJobs);
 
 // get all jobs
-router.get("/", getJobsSanitizer, jobController.getJobById);
+router.get("/", getJobsSanitizer, getJobs);
 
 // Create a new job
-router.post("/", createJobSanitizer, jobController.createJob);
+router.post("/", createJobSanitizer, createJob);
 
 // Update a job
-router.put("/:id", updateJobSanitizer, jobController.updateJob);
+router.put("/:jobId", updateJobSanitizer, updateJob);
 
 // Delete a job
-router.delete("/:id", deleteJobSanitizer, jobController.deleteJob);
+router.delete("/:jobId", deleteJobSanitizer, deleteJob);
 
 router.get("/:jobId/applicants", getJobApplicantsSanitizer, getJobApplicants);
 

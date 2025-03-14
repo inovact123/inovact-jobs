@@ -1,9 +1,9 @@
 const upsertCompanyQuery = `
-  mutation UpsertCompanySettings($object: company_settings_insert_input!) {
-    insert_company_settings_one(
+  mutation UpsertCompanySettings($object: company_insert_input!) {
+    insert_company_one(
       object: $object,
       on_conflict: {
-        constraint: company_settings_user_id_key,
+        constraint: company_cognito_sub_key,
         update_columns: [company_name, website, linkedin, contact_person, email, email_notifications]
       }
     ) {
@@ -14,8 +14,6 @@ const upsertCompanyQuery = `
       contact_person
       email
       email_notifications
-      user_id
-      updated_at
     }
   }
 `;

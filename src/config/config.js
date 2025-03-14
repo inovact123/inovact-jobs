@@ -1,16 +1,18 @@
-const dotenv = require('dotenv');
-const path = require('path');
-const Joi = require('joi');
+const dotenv = require("dotenv");
+const path = require("path");
+const Joi = require("joi");
 
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 
 const envVarsSchema = Joi.object()
   .keys({
-    NODE_ENV: Joi.string().valid('production', 'development', 'staging', 'test').default('development'),
+    NODE_ENV: Joi.string()
+      .valid("production", "development", "staging", "test")
+      .default("development"),
     PORT: Joi.number().default(3000),
     HASURA_ADMIN_SECRET: Joi.string().required(),
     HASURA_API: Joi.string().required(),
-    REGION: Joi.string().default('ap-south-1'),
+    REGION: Joi.string().default("ap-south-1"),
     NOTIFY_QUEUE_URL: Joi.string(),
     ACTIVITIES_QUEUE_URL: Joi.string(),
     EMAIL_QUEUE_URL: Joi.string(),
@@ -19,7 +21,9 @@ const envVarsSchema = Joi.object()
   })
   .unknown();
 
-const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
+const { value: envVars, error } = envVarsSchema
+  .prefs({ errors: { label: "key" } })
+  .validate(process.env);
 
 if (error) {
   throw new Error(`Config validation error: ${error.message}`);

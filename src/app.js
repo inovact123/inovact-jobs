@@ -13,7 +13,6 @@ const morgan = require("./config/morgan");
 const routes = require("./routes/v1");
 const { errorConverter, errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
-const prober = require("./middlewares/prober");
 
 const app = express();
 
@@ -43,9 +42,6 @@ app.use(compression());
 // enable cors
 app.use(cors());
 app.options("*", cors());
-
-// Prober
-app.use(prober);
 
 // API to check server status
 app.get("/", (_, res) => {

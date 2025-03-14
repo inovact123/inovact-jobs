@@ -2,21 +2,17 @@ const express = require("express");
 const companyController = require("../../controllers/company.controller");
 const {
   companySanitizer,
+  addCompanySanitizer,
 } = require("../../controllers/company.controller/sanitizer.js");
 
 const router = express.Router();
 
-// Upsert company settings
-router.put(
-  "/company",
-  companySettingsSanitizer,
-  companyController.upsertCompany
-);
+router.post("/", addCompanySanitizer, companyController.addCompany);
 
-// Get company settings
-router.get("/company", companyController.getCompany);
+router.put("/:id", companySanitizer, companyController.upsertCompany);
 
-// Delete company settings
-router.delete("/company", companyController.deleteCompany);
+router.get("/:id", companyController.getCompany);
+
+router.delete("/", companyController.deleteCompany);
 
 module.exports = router;

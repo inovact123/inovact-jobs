@@ -1,4 +1,4 @@
-const { param, body } = require("express-validator");
+const { param, body, query } = require("express-validator");
 
 const applyForJobSanitizer = [
   param("jobId").isInt().withMessage("Job ID must be an integer").toInt(),
@@ -13,7 +13,7 @@ const applyForJobSanitizer = [
 ];
 
 const getJobApplicantsSanitizer = [
-  param("jobId").isInt().withMessage("Job ID must be an integer").toInt(),
+  param("jobId").isInt().withMessage("Job ID must be an integer"),
 
   query("sortBy")
     .optional()

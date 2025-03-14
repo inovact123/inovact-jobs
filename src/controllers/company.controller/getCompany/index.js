@@ -37,7 +37,7 @@ const getCompany = catchAsync(async (req, res) => {
   if (!companySettings) {
     return res.status(404).json({
       status: false,
-      message: "Company settings not found",
+      message: "Company not found",
     });
   }
 

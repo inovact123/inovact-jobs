@@ -36,8 +36,8 @@ const getJobApplicantsQuery = `
 `;
 
 const checkJobOwnershipQuery = `
-  query CheckJobOwnership($job_id: Int!, $user_id: String!) {
-    jobs(where: {id: {_eq: $job_id}, posted_by: {_eq: $user_id}}) {
+  query CheckJobOwnership($job_id: Int!, $cognito_sub: String!) {
+    jobs(where: {id: {_eq: $job_id}, company: {cognito_sub: {_eq: $cognito_sub}}}) {
       id
     }
   }
@@ -46,5 +46,4 @@ const checkJobOwnershipQuery = `
 module.exports = {
   getJobApplicantsQuery,
   checkJobOwnershipQuery,
-  checkJobExistsQuery,
 };

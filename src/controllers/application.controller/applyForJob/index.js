@@ -48,13 +48,14 @@ const applyForJob = catchAsync(async (req, res) => {
 
   const { jobId } = req.params;
   const { name, assignment_link } = req.body;
-  const applicant_id = req.body.cognito_sub; // Yet to think of this
+  const cognito_sub = req.body.cognito_sub;
 
   const jobAndApplicationCheckResponse = await Hasura(
     checkJobExistsAndExistingApplicationQuery,
-    { id: jobId, applicant_id }
+    { id: jobId, cognito_sub }
   );
   const job = jobAndApplicationCheckResponse.result.data.jobs_by_pk;
+  const user = jobAndApplicationCheckResponse.result.data.user;
 
   if (!job) {
     return res.status(404).json({
@@ -63,20 +64,21 @@ const applyForJob = catchAsync(async (req, res) => {
     });
   }
 
-  if (job.job_status !== "active") {
-    return res.status(400).json({
+  if (!user) {
+    return res.status(404).json({
       status: false,
-      message: "This job is no longer accepting applications",
+      message: "user not found",
     });
   }
 
   if (
-    job.application_deadline &&
-    new Date(job.application_deadline) < new Date()
+    job.job_status !== "active" ||
+    (job.application_deadline &&
+      new Date(job.application_deadline) < new Date())
   ) {
     return res.status(400).json({
       status: false,
-      message: "Application deadline has passed",
+      message: "This job is no longer accepting applications",
     });
   }
 
@@ -90,7 +92,7 @@ const applyForJob = catchAsync(async (req, res) => {
   const applyResponse = await Hasura(applyForJobMutation, {
     object: {
       job_id: jobId,
-      applicant_id,
+      applicant_id: user.id,
       name,
       assignment_link,
       status: "pending",

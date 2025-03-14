@@ -35,11 +35,11 @@ const withdrawApplication = catchAsync(async (req, res) => {
   }
 
   const { applicationId } = req.params;
-  const user_id = req.body.cognito_sub;
+  const cognito_sub = req.body.cognito_sub;
 
   const ownershipResponse = await Hasura(checkApplicationOwnershipQuery, {
     id: applicationId,
-    applicant_id: user_id,
+    cognito_sub,
   });
 
   if (ownershipResponse.result.data.applications.length === 0) {
@@ -53,14 +53,6 @@ const withdrawApplication = catchAsync(async (req, res) => {
     id: applicationId,
     status: "withdrawn",
   });
-
-  if (withdrawResponse.errors) {
-    return res.status(400).json({
-      status: false,
-      message: "Failed to withdraw application",
-      errors: withdrawResponse.errors,
-    });
-  }
 
   return res.status(200).json({
     status: true,

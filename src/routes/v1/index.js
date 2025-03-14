@@ -22,6 +22,11 @@ const defaultRoutes = [
     route: applicationsRoute,
     needAuthentication: true,
   },
+  {
+    path: "/users",
+    route: usersRoute,
+    needAuthentication: true,
+  },
 ];
 
 defaultRoutes.forEach((route) => {
