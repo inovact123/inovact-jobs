@@ -20,6 +20,8 @@ router.post("/", createUserSanitizer, createUser);
 // Get user by ID
 router.get("/:userId", getUserSanitizer, getUser);
 
+router.get("/", getUserSanitizer, getUser);
+
 // Update a user
 router.put("/", updateUserSanitizer, updateUser);
 

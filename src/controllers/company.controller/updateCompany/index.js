@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const { query: Hasura } = require("../../../utils/hasura");
 const catchAsync = require("../../../utils/catchAsync");
 const { upsertCompanyQuery } = require("./queries/mutations");
+const checkIfCanUpdate = require("./queries/queries");
 
 /**
  * @swagger
@@ -45,32 +46,38 @@ const upsertCompany = catchAsync(async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const {
-    company_name,
-    website,
-    linkedin,
-    contact_person,
-    email,
-    email_notifications,
+  const { id } = req.params;
+
+  const { name, website, linkedin_url, cognito_sub } = req.body;
+
+  const checkIfCanUpdateCompanyResponse = await Hasura(checkIfCanUpdate, {
+    companyId: id,
     cognito_sub,
-  } = req.body;
+  });
+
+  if (
+    checkIfCanUpdateCompanyResponse.result.data.recruitment_companies.length ===
+    0
+  ) {
+    return res.status(401).json({
+      status: false,
+      message: "Not authorised to update the company",
+    });
+  }
 
   const upsertResponse = await Hasura(upsertCompanyQuery, {
     object: {
-      company_name,
+      id,
+      name,
       website,
-      linkedin,
-      contact_person,
-      email,
-      email_notifications,
-      cognito_sub,
+      linkedin_url,
     },
   });
 
   return res.status(200).json({
     status: true,
     message: "Company settings updated successfully",
-    data: upsertResponse.result.data.insert_company_settings_one,
+    data: upsertResponse.result.data.insert_recruitment_companies_one,
   });
 });
 

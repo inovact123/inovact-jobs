@@ -11,7 +11,6 @@ const createUserSanitizer = [
 
 const updateUserSanitizer = [
   cognito_sub,
-  param("userId").isUUID().withMessage("Valid user ID is required"),
   body("email").optional().isEmail().withMessage("Valid email is required"),
 ];
 

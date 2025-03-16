@@ -51,7 +51,7 @@ const getUser = catchAsync(async (req, res) => {
   if (req.params.userId) {
     const userId = req.params.userId;
     const userResponse = await Hasura(getUserByIdQuery, { id: userId });
-    user = userResponse.result.data.users_by_pk;
+    user = userResponse.result.data.recruitment_users_by_pk;
 
     if (!user) {
       return res.status(404).json({
@@ -70,7 +70,7 @@ const getUser = catchAsync(async (req, res) => {
   const userResponse = await Hasura(getUserBySubQuery, {
     cognito_sub: cognitoSub,
   });
-  user = userResponse.result.data.users[0];
+  user = userResponse.result.data.recruitment_users[0];
 
   if (!user) {
     return res.status(404).json({

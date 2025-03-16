@@ -1,21 +1,16 @@
-const upsertCompanyQuery = `
-  mutation UpsertCompanySettings($object: company_insert_input!) {
-    insert_company_one(
+const upsertCompanyQuery = `mutation UpsertCompanySettings($object: recruitment_companies_insert_input!) {
+    insert_recruitment_companies_one(
       object: $object,
       on_conflict: {
-        constraint: company_cognito_sub_key,
-        update_columns: [company_name, website, linkedin, contact_person, email, email_notifications]
+        constraint: companies_pkey,
+        update_columns: [name, website, linkedin_url]
       }
     ) {
       id
-      company_name
+      name
       website
-      linkedin
-      contact_person
-      email
-      email_notifications
+      linkedin_url
     }
-  }
-`;
+  }`;
 
 module.exports = { upsertCompanyQuery };

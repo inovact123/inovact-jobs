@@ -1,13 +1,21 @@
-const deleteCompanyQuery = `
-mutation DeleteCompany($id: Int!, $cognito_sub: String) {
-  delete_company(where: {
+const deleteCompanyQuery = `mutation DeleteCompany($id: uuid!, $cognito_sub: String) {
+  delete_recruitment_companies(where: {
     id: {_eq: $id}, 
-    cognito_sub: {_eq: $cognito_sub}
+    company_members: {
+      user:{
+        cognito_sub: {
+          _eq: $cognito_sub
+        }
+      },
+      role: {
+        _eq: "owner"
+      }
+    }
   }) {
     affected_rows
     returning {
       id
-      company_name
+      
     }
   }
 }

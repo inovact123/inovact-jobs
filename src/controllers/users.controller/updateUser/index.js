@@ -45,14 +45,14 @@ const updateUser = catchAsync(async (req, res) => {
   const cognito_sub = req.body.cognito_sub;
 
   const updateResponse = await Hasura(updateUserMutation, {
-    cognito_sub
+    cognito_sub,
     updates: { email },
   });
 
   return res.status(200).json({
     status: true,
     message: "User updated successfully",
-    data: updateResponse.result.data.update_users_by_pk,
+    data: updateResponse.result.data.update_recruitment_users[0],
   });
 });
 

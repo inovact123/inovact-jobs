@@ -34,17 +34,17 @@ const deleteCompany = catchAsync(async (req, res) => {
     cognito_sub,
   });
 
-  if (deleteResponse.result.data.delete_company.affected_rows === 0) {
+  if (deleteResponse.result.data.delete_recruitment_companies.affected_rows === 0) {
     return res.status(404).json({
       status: false,
-      message: "Company not found",
+      message: "Company not found or you are not the owner of the company",
     });
   }
 
   return res.status(200).json({
     status: true,
     message: "Company deleted successfully",
-    data: deleteResponse.result.data.delete_company_settings,
+    data: deleteResponse.result.data.delete_recruitment_companies,
   });
 });
 

@@ -1,19 +1,47 @@
 const addCompanyQuery = `mutation AddCompany(
-  $email_id: String!
-  $cognito_sub: String!
+  $name: String,
+  $website: String,
+  $linkedin_url: String
 ) {
-  insert_user_one(
+  insert_recruitment_companies_one(
     object: {
-      email_id: $email_id
-      cognito_sub:$cognito_sub
+      name: $name
+      website:$website
+      linkedin_url:$linkedin_url
     }
   ) {
     id
-    email_id
+    name
+    website
+    linkedin_url
+    created_at
+    updated_at
   }
 }
 `;
 
+const addMemberToCompany = `mutation addMemberToCompany(
+  $role: String,
+  $user_id: uuid!,
+  $company_id: uuid!
+) {
+  insert_recruitment_company_members_one(
+    object: {
+      role: $role
+      user_id:$user_id
+      company_id:$company_id
+    }
+  ) {
+    id
+    user_id
+    company_id
+    role
+    created_at
+    updated_at
+  }
+}`;
+
 module.exports = {
   addCompanyQuery,
+  addMemberToCompany
 };

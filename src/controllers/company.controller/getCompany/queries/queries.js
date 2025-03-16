@@ -1,17 +1,12 @@
-const getCompanyQuery = `
-  query GetCompany($id: Int!) {
-    company(where: {id: {_eq: $id}}) {
+const getCompanyQuery = `query GetCompany($id: uuid!) {
+    recruitment_companies(where: {id: {_eq: $id}}) {
       id
-      company_name
+      name
       website
-      linkedin
-      contact_person
-      email
-      email_notifications
+      linkedin_url
       created_at
       updated_at
     }
-  }
-`;
+  }`;
 
 module.exports = { getCompanyQuery };

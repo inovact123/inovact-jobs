@@ -43,7 +43,9 @@ const createUser = catchAsync(async (req, res) => {
     cognito_sub,
   });
 
-  if (existingUserResponse.result.data.users.length > 0) {
+  console.log(JSON.stringify(existingUserResponse))
+
+  if (existingUserResponse.result.data.recruitment_users.length > 0) {
     return res.status(400).json({
       status: false,
       message: "User with this cognito_sub already exists",
@@ -60,7 +62,7 @@ const createUser = catchAsync(async (req, res) => {
   return res.status(201).json({
     status: true,
     message: "User created successfully",
-    data: createResponse.result.data.insert_users_one,
+    data: createResponse.result.data.insert_recruitment_users_one,
   });
 });
 

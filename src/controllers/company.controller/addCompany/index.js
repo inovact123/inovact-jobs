@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const { query: Hasura } = require("../../../utils/hasura");
-const { addCompanyQuery } = require("./queries/mutations");
+const { addCompanyQuery, addMemberToCompany} = require("./queries/mutations");
 const catchAsync = require("../../../utils/catchAsync");
 
 const addCompany = catchAsync(async (req, res) => {
@@ -12,20 +12,29 @@ const addCompany = catchAsync(async (req, res) => {
     });
   }
 
-  const { email_id, cognito_sub } = req.body;
+  const { name, website, linkedin_url, userId } = req.body;
 
   const companyData = {
-    email_id,
-    cognito_sub,
+    name,
+    website,
+    linkedin_url,
   };
 
   const createCompanyQueryResponse = await Hasura(addCompanyQuery, companyData);
+
+  const companyid = createCompanyQueryResponse.result.data.insert_recruitment_companies_one.id;
+
+  const addMemberToCompanyQueryResponse = await Hasura(addMemberToCompany, {
+    role:"owner",
+    user_id: userId,
+    company_id: companyid
+  })
 
   return res.status(201).json({
     success: true,
     errorCode: "",
     errorMessage: "",
-    data: null,
+    data: addMemberToCompanyQueryResponse.result.data.insert_recruitment_company_members_one,
   });
 });
 

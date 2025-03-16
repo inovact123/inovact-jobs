@@ -32,7 +32,7 @@ const getCompany = catchAsync(async (req, res) => {
     id: id,
   });
 
-  const companySettings = getResponse.result.data.company[0];
+  const companySettings = getResponse.result.data.recruitment_companies[0];
 
   if (!companySettings) {
     return res.status(404).json({

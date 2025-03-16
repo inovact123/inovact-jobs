@@ -9,10 +9,10 @@ const router = express.Router();
 
 router.post("/", addCompanySanitizer, companyController.addCompany);
 
-router.put("/:id", companySanitizer, companyController.upsertCompany);
+router.put("/:id", companyController.upsertCompany);
 
 router.get("/:id", companyController.getCompany);
 
-router.delete("/", companyController.deleteCompany);
+router.delete("/:id", companyController.deleteCompany);
 
 module.exports = router;
